@@ -1,0 +1,22 @@
+.bar-dots-carousel .slick-dots li {
+    width: 10px;
+    /* 条形长度 */
+    height: 10px;
+    /* 条形高度 */
+    margin: 0 6px;
+}
+
+.bar-dots-carousel .slick-dots li button {
+    width: 100%;
+    height: 100%;
+
+    /* 轻微圆角，非圆点 */
+    background-color: #bfbfbf !important;
+    /* 未激活：中灰 */
+    opacity: 1;
+}
+
+.bar-dots-carousel .slick-dots li.slick-active button {
+    background-color: #2A85F9 !important;
+
+}

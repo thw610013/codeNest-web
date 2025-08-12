@@ -1,0 +1,23 @@
+#hotConditions {
+    width: 60%;
+    margin: 50px 25%;
+    padding: 0 20px;
+}
+
+.square-list {
+    list-style-type: square;
+    padding-left: 1.25rem;
+    /* 统一缩进，确保小方块对齐 */
+    margin: 0;
+    /* 去掉默认外边距便于在栅格中对齐 */
+}
+
+.title {
+    margin-left: 5%;
+    color: #2A85F9;
+    margin-top: 2%;
+}
+
+#selectedLinks {
+    width: 100%;
+}

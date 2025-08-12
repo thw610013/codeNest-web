@@ -1,0 +1,21 @@
+.info-item {
+    margin-right: 12px;
+}
+
+.info-item-icon {
+    margin-right: 6px;
+}
+
+.description {
+    margin: 0 0 2%5%;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: left;
+}
+
+/* 鼠标悬停在文章整体容器时，标题变蓝 */
+.article-item:hover .article-title {
+    color: #3087F4;
+    transition: color 0.3s ease;
+}
