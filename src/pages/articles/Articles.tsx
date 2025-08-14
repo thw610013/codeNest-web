@@ -50,7 +50,6 @@ export default function Articles() {
     const fetchArticles = async (params: SearchParams) => {
         try {
             const res = await searchArticles(params);
-            console.log(res)
             if (Array.isArray(res)) {
                 setArticleList(res);
                 setTotal(res.length); // 你这没分页，只能用长度
@@ -170,7 +169,7 @@ export default function Articles() {
                             >
                                 <HighlightText text={item.content} keyword={searchKeyword} />
                             </p>
-                            <p>
+                            <div>
                                 <Space size="middle">
                                     <span>
                                         <LikeOutlined /> {item.likes ?? 0}
@@ -183,11 +182,11 @@ export default function Articles() {
                                     </span>
                                     <span>{item.createdAt?.slice(0, 10)}</span>
                                 </Space>
-                            </p>
+                            </div>
                         </Col>
 
                         <Col span={4}>
-                            <p>标签：</p>
+                            <div>标签：</div>
                             <Space wrap size={[4, 4]}>
                                 {(item.tags?.split(",") || []).map((tag) => (
                                     <Tag

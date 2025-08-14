@@ -32,8 +32,8 @@ export default function About() {
                         </p>
                         <p>
                             <LinkedinOutlined />{" "}
-                            <a href="https://linkedin.com/in/your-linkedin" target="_blank" rel="noreferrer">
-                                linkedin.com/in/your-linkedin
+                            <a href="http://www.codenest.com.cn" target="_blank" rel="noreferrer">
+                                www.codenest.com.cn
                             </a>
                         </p>
                     </Card>
@@ -43,10 +43,10 @@ export default function About() {
                 <Col xs={24} sm={16}>
                     <Card title="关于我" bordered>
                         <p>
-                            一名热爱技术、专注于前后端开发的程序员，毕业于青岛城市学院。
+                            一名热爱技术、专注于后端开发的程序员，毕业于青岛城市学院。
                             目前在互联网行业工作，熟悉 Java、Spring Boot、Spring Cloud、
-                            Vue3、React、Docker 等技术栈。目标是进入大厂，成为架构师或进入管理层，
-                            并持续探索高性能系统与优雅的代码设计。
+                            Docker 等技术栈。目标是进入大厂，成为架构师并持续探索高性能系统与优雅的代码设计。
+
                         </p>
                     </Card>
 

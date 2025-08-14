@@ -6,6 +6,7 @@ import './index.css';
 import HomeTable from './components/HomeTable';
 import { useEffect, useState } from 'react';
 import { type FeaturedContent, getFeaturedContentList } from '../../api/featured_content_api';
+import { createSiteVisitLog } from '../../api/site_visit_log_api';
 
 export default function Home() {
 
@@ -21,6 +22,15 @@ export default function Home() {
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
+        // 页面访问时发送请求记录
+        createSiteVisitLog({
+            visitDate: new Date().toISOString().split('T')[0],
+            pagePath: '/home',
+            userAgent: navigator.userAgent
+        }).catch(err => console.error('访问记录上传失败', err));
+    }, []);
+
+    useEffect(() => {
         setLoading(true);
         getFeaturedContentList()
             .then(res => {
@@ -30,6 +40,7 @@ export default function Home() {
             })
             .finally(() => setLoading(false));
     }, []);
+
     // 取 tools 中第 0-3 条
     const convertToCardDataOne = (items: FeaturedContent[]) =>
         items.slice(0, 4).map((item, idx) => ({

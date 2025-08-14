@@ -1,6 +1,8 @@
 
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { Breadcrumb, Layout as AntLayout, Menu, theme, Row } from 'antd';
+import { Breadcrumb, Layout as AntLayout, Menu, theme, Row, Space } from 'antd';
+import { getVisitCount } from '../api/site_visit_log_api';
+import { useEffect, useState } from 'react';
 
 const { Header, Content, Footer } = AntLayout;
 
@@ -18,7 +20,7 @@ export default function Layout() {
     const { token: { colorBgContainer, borderRadiusLG } } = theme.useToken();
     const navigate = useNavigate();
     const location = useLocation();
-
+    const [vistCount, setVistCount] = useState<number>(0);
     const pathname = location.pathname.toLowerCase(); // 统一转小写
     let baseKey = '/' + (pathname.split('/')[1] || '');
 
@@ -45,6 +47,11 @@ export default function Layout() {
         navigate(key);
     };
 
+    useEffect(() => {
+        getVisitCount().then((vistCount: number) => {
+            setVistCount(vistCount);
+        });
+    }, []);
     return (
         <AntLayout style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <Header
@@ -88,7 +95,11 @@ export default function Layout() {
                 </div>
             </Content>
             <Footer>
-                <Row justify="center">最近更新时间：2025-08-11</Row>
+                <Row justify="center">
+                    <Space>
+                        <span>最近更新时间：2025-08-11</span>
+                        <span>总访客:{vistCount}</span>
+                    </Space></Row>
                 <Row justify="center">备案号：</Row>
                 <Row justify="center"> CodeNest ©{new Date().getFullYear()} Created by Ant UED</Row>
             </Footer>

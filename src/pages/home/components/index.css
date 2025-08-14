@@ -11,3 +11,9 @@
     color: #2A85F9;
     margin-top: 2%;
 }
+
+/* 鼠标悬停颜色变蓝 */
+.article-link:hover .article-title {
+    color: #1890ff;
+    /* Ant Design 蓝色 */
+}
