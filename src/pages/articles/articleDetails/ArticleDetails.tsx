@@ -7,17 +7,47 @@ import { type Article } from "../../../api/article_api";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-
+import { createContentVisitLog } from "../../../api/content_visit_log_api";
+import { getVisitLogsByArticleId } from "../../../api/content_visit_log_api";
+import { getLikeByTarget } from "../../../api/like_record_api"
+import LikeButton from '../../../components/LikeButton';
 export default function ArticleDetails() {
     const navigate = useNavigate();
     const { id } = useParams();
-    console.log(id);
     const [article, setArticle] = useState<Article | null>(null);
+    const [visitCount, setVisitCount] = useState<number>(0); // 浏览量统计
+    const [likeCount, setLikeCount] = useState<number>(0); // 点赞量统计
+
     useEffect(() => {
-        getArticleById(Number(id)).then((article) => {
-            setArticle(article || null);
+        if (!id) return;
+
+        const articleId = Number(id);
+
+        // 1. 插入访问记录（只传文章 ID）
+        createContentVisitLog({
+            visitDate: new Date().toISOString().split("T")[0], // YYYY-MM-DD
+            articleId: articleId
+        }).catch(err => {
+            console.error("记录访问日志失败", err);
         });
+
+        // 2. 查询文章详情
+        getArticleById(articleId).then((data) => {
+            setArticle(data || null);
+        });
+
+        // 3. 查询当前文章访问记录（统计浏览量）
+        getVisitLogsByArticleId(articleId).then((logs) => {
+            setVisitCount(logs.length); // 如果要去重可以在后端处理
+        });
+
+        //4.查询点赞数量
+        getLikeByTarget("1", Number(id)).then((data) => {
+            setLikeCount(data || 0);
+        });
+
     }, [id]);
+
     return (
         <div>
             <Space direction="vertical" style={{ width: "100%" }}>
@@ -25,8 +55,7 @@ export default function ArticleDetails() {
                 <Space>
                     <Button type="default" onClick={() => navigate(`/articles`)}>返回</Button>
                     <Button type="default" onClick={() => navigate(`/articles/${Number(id) - 1}`)}>上一篇</Button>
-                    <Button type="default" onClick={() => navigate(`/articles/${Number(id) + 1}`)}>下一篇</Button>
-                </Space>
+                    <Button type="default" onClick={() => navigate(`/articles/${Number(id) + 1}`)}>下一篇</Button>                </Space>
                 <Card title={article?.title}>
                     <Row>
                         <Col span={6}>
@@ -36,10 +65,10 @@ export default function ArticleDetails() {
                             <p>发布时间：{article?.createdAt}</p>
                         </Col>
                         <Col span={6}>
-                            <p>浏览量：{article?.views}</p>
+                            <p>浏览量：{visitCount}</p>
                         </Col>
                         <Col span={6}>
-                            <p>点赞量：{article?.likes}</p>
+                            <p>点赞量：{likeCount}</p>
                         </Col>
                     </Row>
                     <Row>
@@ -80,6 +109,16 @@ export default function ArticleDetails() {
                     </Col>
                 </Row>
 
+                <LikeButton
+                    targetId={String(id)}
+                    targetType="1"
+                    onSuccess={() => {
+                        // 点赞成功后，刷新最新点赞数量
+                        getLikeByTarget("1", Number(id)).then(data => {
+                            setLikeCount(data || 0);
+                        });
+                    }}
+                />
             </Space>
         </div>
 

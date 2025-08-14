@@ -64,7 +64,7 @@ export default function QuestionBank() {
                                 title={question.title}
                                 description={question.description}
                                 image={question.imageUrl || "https://via.placeholder.com/240x140"}
-                                width="240px"
+                                width="250px"
                                 pictureWidth="250px"
                                 pictureHeight="200px"
                             />
