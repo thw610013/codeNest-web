@@ -43,14 +43,14 @@ export const createTool = (data: ToolInfo) => {
     });
 };
 
-// 修改工具
-export const updateTool = (id: number, data: Partial<ToolInfo>) => {
-    return request<void>({
-        url: `/api/tools/${id}`,
-        method: 'PUT',
-        data,
-    });
-};
+// // 修改工具
+// export const updateTool = (id: number, data: Partial<ToolInfo>) => {
+//     return request<void>({
+//         url: `/api/tools/${id}`,
+//         method: 'PUT',
+//         data,
+//     });
+// };
 
 // 删除工具
 export const deleteTool = (id: number) => {
