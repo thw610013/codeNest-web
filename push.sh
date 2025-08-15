@@ -9,8 +9,8 @@ if [ -z "$1" ]; then
 fi
 
 # 添加远程仓库（只会在第一次运行时生效，之后会提示已存在）
-git remote add gitee git@gitee.com:hw_love_666/code-nest-server.git 2>/dev/null
-git remote add github git@github.com:thw610013/codeNest-server.git 2>/dev/null
+git remote add gitee git@gitee.com:hw_love_666/code-nest-web.git 2>/dev/null
+git remote add github git@github.com:thw610013/codeNest-web.git 2>/dev/null
 
 # 拉取最新代码，避免冲突
 git pull gitee main --rebase
