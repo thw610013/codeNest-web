@@ -1,17 +1,14 @@
-# 1. 构建阶段
-FROM node:18-alpine AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-
-# 2. 运行阶段 - 使用 Nginx 部署静态文件
+# 使用 Nginx 运行已经构建好的前端
 FROM nginx:latest
-COPY --from=build /app/dist /usr/share/nginx/html
 
-# 自定义 nginx 配置（实现 /api 反向代理到后端）
+# 将本地编译好的 dist 目录复制到 Nginx 默认目录
+COPY dist /usr/share/nginx/html
+
+# 自定义 Nginx 配置（实现 /api 反向代理到后端）
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# 暴露端口
 EXPOSE 80
+
+# 启动 Nginx
 CMD ["nginx", "-g", "daemon off;"]
