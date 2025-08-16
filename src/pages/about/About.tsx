@@ -5,6 +5,7 @@ import {
     LinkedinOutlined,
     CodeOutlined,
 } from "@ant-design/icons";
+import CalendarHeatmap from "./components/ActiveEchart";
 
 export default function About() {
     return (
@@ -36,6 +37,9 @@ export default function About() {
                                 www.codenest.com.cn
                             </a>
                         </p>
+                    </Card>
+                    <Card>
+                        <CalendarHeatmap year="2025" />
                     </Card>
                 </Col>
 

@@ -1,7 +1,6 @@
-// src/pages/home.tsx
 import CarouselComponent from '../../components/Carousel';
 import CarouselDiv from '../../components/carouseDiv/CarouselDiv';
-import { Row, Col, Divider, Spin } from "antd";
+import { Row, Col, Divider, Spin, Card } from "antd";
 import './index.css';
 import HomeTable from './components/HomeTable';
 import { useEffect, useState } from 'react';
@@ -11,10 +10,10 @@ import { createSiteVisitLog } from '../../api/site_visit_log_api';
 export default function Home() {
 
     const titleList = [
-        { title: '做技术没有什么难的，难的是人情世故' },
-        { title: '认真学一学，没有想的那么难，试一试，万一失败了呢' },
-        { title: '人生就像代码，明明写得好好的，运行时却总出错' },
-        { title: '梦想很美好，现实很骨感，别忘了骨头还是给自己顶着呢' }
+        { title: '千里之行，始于足下。' },
+        { title: '胜而不骄，败而不馁。' },
+        { title: '保持热爱，大胆向前。' },
+
     ];
 
     const [tools, setTools] = useState<FeaturedContent[]>([]);
@@ -22,7 +21,6 @@ export default function Home() {
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        // 页面访问时发送请求记录
         createSiteVisitLog({
             visitDate: new Date().toISOString().split('T')[0],
             pagePath: '/home',
@@ -34,70 +32,16 @@ export default function Home() {
         setLoading(true);
         getFeaturedContentList()
             .then(res => {
-                // 按 type 分类
                 setTools(res.filter(item => item.type === 'tool'));
                 setWebsites(res.filter(item => item.type === 'website'));
             })
             .finally(() => setLoading(false));
     }, []);
 
-    // 取 tools 中第 0-3 条
-    const convertToCardDataOne = (items: FeaturedContent[]) =>
-        items.slice(0, 4).map((item, idx) => ({
-            id: item.id ?? idx,
-            title: item.name,
-            image: item.image,
-            description: item.description,
-            linkUrl: item.linkUrl || '',
-            type: item.type,
-        }));
-
-    // 取 tools 中第 4-7 条
-    const convertToCardDataTwo = (items: FeaturedContent[]) =>
-        items.slice(4, 8).map((item, idx) => ({
-            id: item.id ?? idx + 4,
-            title: item.name,
-            image: item.image,
-            description: item.description,
-            linkUrl: item.linkUrl || '',
-            type: item.type,
-        }));
-
-    // 取 tools 中第 8-11 条
-    const convertToCardDataThree = (items: FeaturedContent[]) =>
-        items.slice(8, 12).map((item, idx) => ({
-            id: item.id ?? idx + 8,
-            title: item.name,
-            image: item.image,
-            description: item.description,
-            linkUrl: item.linkUrl || '',
-            type: item.type,
-        }));
-
-    // website 分组转换
-    const convertWebsiteDataOne = (items: FeaturedContent[]) =>
-        items.slice(0, 4).map((item, idx) => ({
-            id: item.id ?? idx,
-            title: item.name,
-            image: item.image,
-            description: item.description,
-            linkUrl: item.linkUrl || '',
-            type: item.type,
-        }));
-
-    const convertWebsiteDataTwo = (items: FeaturedContent[]) =>
-        items.slice(4, 8).map((item, idx) => ({
-            id: item.id ?? idx + 4,
-            title: item.name,
-            image: item.image,
-            description: item.description,
-            linkUrl: item.linkUrl || '',
-            type: item.type,
-        }));
-
-    const convertWebsiteDataThree = (items: FeaturedContent[]) =>
-        items.slice(8, 12).map((item, idx) => ({
-            id: item.id ?? idx + 8,
+    // 数据转换函数
+    const sliceCards = (items: FeaturedContent[], start: number, end: number) =>
+        items.slice(start, end).map((item, idx) => ({
+            id: item.id ?? idx + start,
             title: item.name,
             image: item.image,
             description: item.description,
@@ -107,74 +51,48 @@ export default function Home() {
 
     return (
         <div>
-            {/* <h2 className="title">精选热况</h2> */}
             {/* 轮播 */}
             <CarouselComponent />
-            {/* 牢骚区域 */}
-            <div id="hotConditions">
-                <Row align="middle" gutter={16} >
-                    <Col span={12} >
-                        <ul className="square-list">
-                            <li>{titleList[0].title}</li>
-                        </ul>
-                    </Col>
-                    <Col span={12} >
-                        <ul className="square-list">
-                            <li>
-                                {titleList[1].title}
-                            </li>
-                        </ul>
-                    </Col>
-                </Row>
-                <Divider />
-                <Row align="middle" gutter={16} >
-                    <Col span={12} >
-                        <ul className="square-list">
-                            <li>{titleList[2].title}</li>
-                        </ul>
-                    </Col>
-                    <Col span={12}>
-                        <ul className="square-list">
-                            <li>
-                                {titleList[3].title}
-                            </li>
-                        </ul>
-                    </Col>
-                </Row>
-                <Divider />
-            </div>
 
-            <h2 className="title">精选链接</h2>
-            <div id="selectedLinks" >
-                {loading ? (
-                    <Spin tip="加载中..." style={{ display: 'block', margin: '100px auto' }} />
-                ) : (
-                    <CarouselDiv
-                        group1Cards={convertToCardDataOne(tools)}
-                        group2Cards={convertToCardDataTwo(tools)}
-                        group3Cards={convertToCardDataThree(tools)}
-                    />
-                )}
-            </div>
+            {/* 快乐箴言区域 */}
+            <Divider orientation="left" style={{ color: '#2A85F9' }}>快乐箴言</Divider>
+            <Row gutter={[16, 16]}>
+                {titleList.map((t, idx) => (
+                    <Col key={idx} xs={24} sm={12} md={12} lg={6}>
+                        <Card hoverable style={{ minHeight: 80, textAlign: 'center' }}>
+                            {t.title}
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
+
+            {/* 精选链接 */}
+            <Divider orientation="left" style={{ color: '#2A85F9' }}>精选链接</Divider>
+            {loading ? (
+                <Spin tip="加载中..." style={{ display: 'block', margin: '100px auto' }} />
+            ) : (
+                <CarouselDiv
+                    group1Cards={sliceCards(tools, 0, 4)}
+                    group2Cards={sliceCards(tools, 4, 8)}
+                    group3Cards={sliceCards(tools, 8, 12)}
+                />
+            )}
 
             {/* 精选网站 */}
-            <h2 className="title">精选网站</h2>
-            <div id="selectedWebsites">
-                {loading ? (
-                    <Spin tip="加载中..." style={{ display: 'block', margin: '100px auto' }} />
-                ) : (
-                    <CarouselDiv
-                        group1Cards={convertWebsiteDataOne(websites)}
-                        group2Cards={convertWebsiteDataTwo(websites)}
-                        group3Cards={convertWebsiteDataThree(websites)}
-                    />
-                )}
-            </div>
+            <Divider orientation="left" style={{ color: '#2A85F9' }}>精选网站</Divider>
+            {loading ? (
+                <Spin tip="加载中..." style={{ display: 'block', margin: '100px auto' }} />
+            ) : (
+                <CarouselDiv
+                    group1Cards={sliceCards(websites, 0, 4)}
+                    group2Cards={sliceCards(websites, 4, 8)}
+                    group3Cards={sliceCards(websites, 8, 12)}
+                />
+            )}
 
-            <h2 className="title">精选文章</h2>
-            <div>
-                <HomeTable />
-            </div>
-
-        </div>);
+            {/* 精选文章 */}
+            <Divider orientation="left" style={{ color: '#2A85F9' }}>精选文章</Divider>
+            <HomeTable />
+        </div>
+    );
 }

@@ -35,24 +35,19 @@ export default function Articles() {
 
     const [articleList, setArticleList] = useState<Article[]>([]);
     const [total, setTotal] = useState(0);
-
-    // 维护搜索参数
     const [searchParams, setSearchParams] = useState<SearchParams>({
         tag: "all",
         page: 1,
         size: 10,
     });
-
-    // 维护当前搜索关键字（用于高亮）
     const [searchKeyword, setSearchKeyword] = useState("");
 
-    // 请求数据函数
     const fetchArticles = async (params: SearchParams) => {
         try {
             const res = await searchArticles(params);
             if (Array.isArray(res)) {
                 setArticleList(res);
-                setTotal(res.length); // 你这没分页，只能用长度
+                setTotal(res.length);
             } else {
                 setArticleList([]);
                 setTotal(0);
@@ -64,12 +59,10 @@ export default function Articles() {
         }
     };
 
-    // 监听搜索参数变化自动拉数据
     useEffect(() => {
         fetchArticles(searchParams);
     }, [searchParams]);
 
-    // 搜索框搜索
     const onSearch = (value: string) => {
         setSearchKeyword(value.trim());
         setSearchParams((prev) => ({
@@ -80,7 +73,6 @@ export default function Articles() {
         }));
     };
 
-    // 标签切换
     const onTagChange = (value: string) => {
         setSearchParams((prev) => ({
             ...prev,
@@ -89,7 +81,6 @@ export default function Articles() {
         }));
     };
 
-    // 日期区间切换
     const onDateChange: RangePickerProps['onChange'] = (dates) => {
         if (!dates || !dates[0] || !dates[1]) {
             setSearchParams((prev) => ({
@@ -110,16 +101,16 @@ export default function Articles() {
 
     return (
         <div>
-            <Row justify="center" align="middle" gutter={16} style={{ marginBottom: 20 }}>
-                <Col span={2}>
+            <Row gutter={[16, 16]} justify="start" align="middle" style={{ marginBottom: 20 }}>
+                <Col xs={24} sm={24} md={6}>
                     <h2 className="title">技术文章</h2>
                     <p className="description">分享技术，记录生活</p>
                 </Col>
 
-                <Col span={6}>
+                <Col xs={24} sm={12} md={4}>
                     <Select
                         defaultValue="all"
-                        style={{ width: 150 }}
+                        style={{ width: '100%' }}
                         onChange={onTagChange}
                         value={searchParams.tag}
                     >
@@ -131,17 +122,17 @@ export default function Articles() {
                     </Select>
                 </Col>
 
-                <Col span={8}>
-                    <RangePicker onChange={onDateChange} />
+                <Col xs={24} sm={12} md={8}>
+                    <RangePicker style={{ width: '100%' }} onChange={onDateChange} />
                 </Col>
 
-                <Col span={8}>
+                <Col xs={24} sm={24} md={6}>
                     <Search
                         placeholder="搜索标题和内容"
                         onSearch={onSearch}
                         allowClear
                         enterButton
-                        style={{ width: 400 }}
+                        style={{ width: '100%' }}
                     />
                 </Col>
             </Row>
@@ -154,8 +145,8 @@ export default function Articles() {
                     style={{ cursor: "pointer", padding: "12px 0" }}
                 >
                     <Divider dashed />
-                    <Row gutter={16}>
-                        <Col span={20}>
+                    <Row gutter={[16, 16]}>
+                        <Col xs={24} md={20}>
                             <h3 className="article-title">
                                 <HighlightText text={item.title} keyword={searchKeyword} />
                             </h3>
@@ -170,7 +161,7 @@ export default function Articles() {
                                 <HighlightText text={item.content} keyword={searchKeyword} />
                             </p>
                             <div>
-                                <Space size="middle">
+                                <Space size="middle" wrap>
                                     <span>
                                         <LikeOutlined /> {item.likes ?? 0}
                                     </span>
@@ -185,7 +176,7 @@ export default function Articles() {
                             </div>
                         </Col>
 
-                        <Col span={4}>
+                        <Col xs={24} md={4}>
                             <div>标签：</div>
                             <Space wrap size={[4, 4]}>
                                 {(item.tags?.split(",") || []).map((tag) => (
@@ -201,8 +192,15 @@ export default function Articles() {
                                                         : "#108ee9"
                                         }
                                     >
-                                        {/* 如果 tag == diary 则替换成学习日记，以此类推 */}
-                                        {tag === "diary" ? "学习日记" : tag === "share" ? "技术分享" : tag === "difficult" ? "疑难杂症" : tag === "other" ? "其他" : tag}
+                                        {tag === "diary"
+                                            ? "学习日记"
+                                            : tag === "share"
+                                                ? "技术分享"
+                                                : tag === "difficult"
+                                                    ? "疑难杂症"
+                                                    : tag === "other"
+                                                        ? "其他"
+                                                        : tag}
                                     </Tag>
                                 ))}
                             </Space>

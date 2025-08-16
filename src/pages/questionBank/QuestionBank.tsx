@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Flex, Radio, Typography, Divider, Spin } from "antd";
+import { Typography, Divider, Spin, Radio, Row, Col } from "antd";
 import { Link } from "react-router-dom";
 import UniversalCard from "../../components/UniversalCard";
 import { getQuestionBankList, type QuestionBank as QuestionBankType } from "../../api/question_bank_api";
@@ -12,20 +12,15 @@ export default function QuestionBank() {
     const [questionBanks, setQuestionBanks] = useState<QuestionBankType[]>([]);
     const [loading, setLoading] = useState(false);
 
-    // 拉取后端数据
     useEffect(() => {
         setLoading(true);
         getQuestionBankList({ tags })
-            .then((res) => {
-                setQuestionBanks(res.records); // 这里拿的是 records 数组
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+            .then(res => setQuestionBanks(res.records))
+            .finally(() => setLoading(false));
     }, [tags]);
 
     return (
-        <div style={{ width: "80%", margin: "0 auto", paddingTop: 20 }}>
+        <div style={{ width: "95%", maxWidth: 1200, margin: "0 auto", paddingTop: 20 }}>
             <Title level={2} style={{ color: "#1677ff", marginBottom: 8 }}>
                 面试题库
             </Title>
@@ -39,7 +34,7 @@ export default function QuestionBank() {
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
                 buttonStyle="solid"
-                style={{ marginBottom: 24 }}
+                style={{ marginBottom: 24, flexWrap: 'wrap', display: 'flex', gap: 8 }}
             >
                 <Radio.Button value="frontend">前端</Radio.Button>
                 <Radio.Button value="backend">后端</Radio.Button>
@@ -53,24 +48,31 @@ export default function QuestionBank() {
             {loading ? (
                 <Spin style={{ display: "block", marginTop: 40 }} />
             ) : (
-                <Flex wrap="wrap" gap="20px" justify="flex-start">
+                <Row gutter={[16, 16]}>
                     {questionBanks.map((question) => (
-                        <Link
+                        <Col
                             key={question.id}
-                            to={`/questionbank/questions/${question.id}`}
-                            style={{ display: 'inline-block' }}
+                            xs={24}      // 手机端一行一列
+                            sm={12}      // 小屏幕两列
+                            md={8}       // 中屏幕三列
+                            lg={6}       // 大屏幕四列
                         >
-                            <UniversalCard
-                                title={question.title}
-                                description={question.description}
-                                image={question.imageUrl || "https://via.placeholder.com/240x140"}
-                                width="250px"
-                                pictureWidth="250px"
-                                pictureHeight="200px"
-                            />
-                        </Link>
+                            <Link
+                                to={`/questionbank/questions/${question.id}`}
+                                style={{ display: 'block' }}
+                            >
+                                <UniversalCard
+                                    title={question.title}
+                                    description={question.description}
+                                    image={question.imageUrl || "https://via.placeholder.com/240x140"}
+                                    width="100%"              // 自适应Col宽度
+                                    pictureWidth="100%"       // 图片自适应
+                                    pictureHeight="160px"     // 固定高度，避免拉伸
+                                />
+                            </Link>
+                        </Col>
                     ))}
-                </Flex>
+                </Row>
             )}
         </div>
     );
