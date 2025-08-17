@@ -1,5 +1,6 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from '../components/Layout';
+import HeaderOnlyLayout from '../components/HeaderOnlyLayout';
 import Home from '../pages/home/Home';
 import Tools from '../pages/tools/Tools';
 import QuestionBank from '../pages/questionBank/QuestionBank';
@@ -11,11 +12,17 @@ import ArticleDetails from '../pages/articles/articleDetails/ArticleDetails';
 import ToolDetails from '../pages/tools/toolDetails/ToolDetails';
 import Questions from '../pages/questionBank/questions/Questions';
 import QuestionDetails from '../pages/questionBank/questions/questionDetails/QuestionDetails';
+
 export default function AppRoutes() {
     return (
         <Routes>
-            <Route path="/" element={<Layout />}>
+            {/* 首页使用仅包含顶部导航的布局，便于实现全屏动画 */}
+            <Route path="/" element={<HeaderOnlyLayout />}>
                 <Route index element={<Home />} />
+            </Route>
+
+            {/* 其他页面使用完整布局 */}
+            <Route path="/" element={<Layout />}>
                 <Route path="tools" element={<Tools />} />
                 <Route path="tools/:id" element={<ToolDetails />} />
                 <Route path="questionbank" element={<QuestionBank />} />
@@ -26,8 +33,7 @@ export default function AppRoutes() {
                 <Route path="wallpaper" element={<Wallpaper />} />
                 <Route path="messageboard" element={<MessageBoard />} />
                 <Route path="about" element={<About />} />
-                {/* 其他路由 */}
-                {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
+                <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
         </Routes>
     );

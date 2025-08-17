@@ -19,3 +19,70 @@
 #selectedLinks {
     width: 100%;
 }
+
+.home-hero {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 64px);
+    /* Antd Header 默认高度 64px，如有变动可调整 */
+    overflow: hidden;
+}
+
+.home-hero .light-rays-container {
+    position: absolute;
+    inset: 0;
+}
+
+.home-hero__content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+    pointer-events: none;
+}
+
+.home-section {
+    padding: 48px 0;
+}
+
+.home-section__inner {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+@media (max-width: 768px) {
+    .home-hero__content {
+        padding: 0 16px;
+    }
+}
+
+.home-scroll-stack {
+    margin: 40vh 0 30vh 0;
+}
+
+.shiny-text-title {
+    font-size: 100px;
+}
+
+/* index.css 或 GradientText.css */
+.custom-class {
+    font-size: 100px;
+    /* 默认大屏字体 */
+}
+
+/* 手机屏幕 */
+@media screen and (max-width: 768px) {
+    .custom-class {
+        font-size: 20px;
+    }
+}
+
+.count-up-text {
+    font-size: 100px;
+    /* 从蓝到紫渐变颜色 */
+    color: linear-gradient(to right, #40ffaa, #4079ff);
+}

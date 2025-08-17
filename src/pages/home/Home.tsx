@@ -1,24 +1,32 @@
-import CarouselComponent from '../../components/Carousel';
-import CarouselDiv from '../../components/carouseDiv/CarouselDiv';
-import { Row, Col, Divider, Spin, Card } from "antd";
+// import CarouselComponent from '../../components/Carousel';
+import { Flex } from "antd";
 import './index.css';
-import HomeTable from './components/HomeTable';
+
 import { useEffect, useState } from 'react';
-import { type FeaturedContent, getFeaturedContentList } from '../../api/featured_content_api';
+import { getFeaturedContentList } from '../../api/featured_content_api';
 import { createSiteVisitLog } from '../../api/site_visit_log_api';
+import LightRays from '../home/components/lightRays/LightRays';
+import TextType from './components/textType/TextType';
+import ScrollStack, { ScrollStackItem } from './components/scrollStack/ScrollStack';
+import GradientText from './components/gradientText/GradientText';
+import FallingText from './components/fallingText/FallingText';
+import ClickSpark from './components/clickSpark/ClickSpark';
+import CountUp from './components/countup/Countup';
+import { getVisitCount } from '../../api/site_visit_log_api';
+import TrueFocus from './components/trueFocus/TrueFocus';
+import { Link } from 'react-router-dom';
+import { ChromaGrid } from './components/chromaGrid/ChromaGrid';
+import { type FeaturedContent } from '../../api/featured_content_api';
+import CardSwap, { Card } from './components/cardSwap/CardSwap';
+import { type Article, getArticleList } from '../../api/article_api';
+import RollingGallery from '../../components/rollingGallery/RollingGallery';
 
 export default function Home() {
 
-    const titleList = [
-        { title: '千里之行，始于足下。' },
-        { title: '胜而不骄，败而不馁。' },
-        { title: '保持热爱，大胆向前。' },
-
-    ];
-
-    const [tools, setTools] = useState<FeaturedContent[]>([]);
-    const [websites, setWebsites] = useState<FeaturedContent[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [fontSize, setFontSize] = useState<number>(100); // 默认大屏字体
+    const [vistCount, setVistCount] = useState<number>(0);
+    const [websiteItems, setWebsiteItems] = useState<FeaturedContent[]>([]);
+    const [articleList, setArticleList] = useState<Article[]>([]);
 
     useEffect(() => {
         createSiteVisitLog({
@@ -29,70 +37,246 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
-        setLoading(true);
+
         getFeaturedContentList()
             .then(res => {
-                setTools(res.filter(item => item.type === 'tool'));
-                setWebsites(res.filter(item => item.type === 'website'));
+                console.log(res);
+                const webs = res.filter(item => item.type === 'website');
+                setWebsiteItems(webs);
             })
-            .finally(() => setLoading(false));
     }, []);
 
-    // 数据转换函数
-    const sliceCards = (items: FeaturedContent[], start: number, end: number) =>
-        items.slice(start, end).map((item, idx) => ({
-            id: item.id ?? idx + start,
-            title: item.name,
-            image: item.image,
-            description: item.description,
-            linkUrl: item.linkUrl || '',
-            type: item.type,
-        }));
+    useEffect(() => {
+        const handleResize = () => {
+            const width = window.innerWidth;
+            if (width <= 768) {
+                // 手机屏幕
+                setFontSize(20);
+            } else {
+                // 正常电脑屏幕
+                setFontSize(100);
+            }
+        };
+        // 初始化调用一次
+        handleResize();
+        // 添加事件监听
+        window.addEventListener('resize', handleResize);
+        // 组件卸载时清理
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // 获取访客数
+    useEffect(() => {
+        getVisitCount().then(setVistCount);
+    }, []);
+
+    //推荐文章
+    useEffect(() => {
+        getArticleList().then((list) => {
+            setArticleList(list); // list 已经是 Article[] 了
+        });
+    }, []);
 
     return (
         <div>
-            {/* 轮播 */}
-            <CarouselComponent />
+            <ClickSpark
+                sparkColor='#7FB5F8'
+                sparkSize={20}
+                sparkRadius={15}
+                sparkCount={8}
+                duration={400}
+            >
+                {/* 全屏动画区 */}
+                <div className="home-hero">
+                    <LightRays
+                        raysOrigin="top-center"
+                        raysColor="#00ffff"
+                        raysSpeed={1.5}
+                        lightSpread={1.2}
+                        fadeDistance={1.2}
+                        rayLength={2}
+                        followMouse={true}
+                        mouseInfluence={0.1}
+                        noiseAmount={0.1}
+                        distortion={0.05}
+                    />
+                    <div className="home-hero__content">
+                        <TextType
+                            text={["CodeNest，代码的巢，温暖又安全", "welcome"]}
+                            typingSpeed={100}
+                            pauseDuration={3000}
+                            showCursor={true}
+                            cursorCharacter="|"
+                            style={{ fontSize: `${fontSize}px` }}
+                            loop={true}
+                        />
+                    </div>
+                </div>
 
-            {/* 快乐箴言区域 */}
-            <Divider orientation="left" style={{ color: '#2A85F9' }}>快乐箴言</Divider>
-            <Row gutter={[16, 16]}>
-                {titleList.map((t, idx) => (
-                    <Col key={idx} xs={24} sm={12} md={12} lg={6}>
-                        <Card hoverable style={{ minHeight: 80, textAlign: 'center' }}>
-                            {t.title}
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
+                <section className="home-scroll-stack">
+                    <div>
+                        <ScrollStack>
 
-            {/* 精选链接 */}
-            <Divider orientation="left" style={{ color: '#2A85F9' }}>精选链接</Divider>
-            {loading ? (
-                <Spin tip="加载中..." style={{ display: 'block', margin: '100px auto' }} />
-            ) : (
-                <CarouselDiv
-                    group1Cards={sliceCards(tools, 0, 4)}
-                    group2Cards={sliceCards(tools, 4, 8)}
-                    group3Cards={sliceCards(tools, 8, 12)}
-                />
-            )}
+                            <ScrollStackItem  >
+                                <Flex >
+                                    <GradientText
+                                        colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+                                        animationSpeed={3}
+                                        showBorder={false}
+                                        className="custom-class"
+                                    >
+                                        千里之行
+                                        始于足下
+                                    </GradientText>
 
-            {/* 精选网站 */}
-            <Divider orientation="left" style={{ color: '#2A85F9' }}>精选网站</Divider>
-            {loading ? (
-                <Spin tip="加载中..." style={{ display: 'block', margin: '100px auto' }} />
-            ) : (
-                <CarouselDiv
-                    group1Cards={sliceCards(websites, 0, 4)}
-                    group2Cards={sliceCards(websites, 4, 8)}
-                    group3Cards={sliceCards(websites, 8, 12)}
-                />
-            )}
+                                </Flex>
+                            </ScrollStackItem>
+                            <ScrollStackItem>
+                                <Flex justify='center' align='center'>
+                                    <GradientText
+                                        colors={[
+                                            "#8e44ad", // 紫
+                                            "#9b59b6", // 淡紫
+                                            "#e67e22", // 橙
+                                            "#f1c40f", // 黄
+                                            "#f39c12"  // 金黄
+                                        ]}
+                                        animationSpeed={3}
+                                        showBorder={false}
+                                        className="custom-class"
+                                    >
+                                        胜而不骄，败而不馁
+                                    </GradientText>
 
-            {/* 精选文章 */}
-            <Divider orientation="left" style={{ color: '#2A85F9' }}>精选文章</Divider>
-            <HomeTable />
+                                </Flex>
+                            </ScrollStackItem>
+                            <ScrollStackItem>
+                                <Flex justify='center' align='center'>
+                                    <GradientText
+                                        colors={[
+                                            "#0f2027", // 深蓝黑
+                                            "#203a43", // 靛青
+                                            "#2c5364", // 青黑蓝
+                                            "#6a0572", // 紫红
+                                            "#c06c84"  // 玫瑰金粉
+                                        ]}
+                                        animationSpeed={3}
+                                        showBorder={false}
+                                        className="custom-class"
+                                    >
+                                        胜而不骄，败而不馁
+                                    </GradientText>
+
+                                </Flex>
+                            </ScrollStackItem>
+                        </ScrollStack>
+                    </div>
+                </section>
+
+                <Flex justify='center' align='center'>
+                    <FallingText
+                        text={`技术栈 React Bits SpringBoot Mysql AntDesignReact TS MyBatisPlus Knif4j`}
+                        highlightWords={["React", "Bits", "SpringBoot"]}
+                        highlightClass="highlighted"
+                        trigger="scroll"
+                        backgroundColor="transparent"
+                        wireframes={false}
+                        gravity={0.56}
+                        fontSize="2rem"
+                        mouseConstraintStiffness={0.9}
+                    />
+                </Flex>
+
+                <Flex justify='center' align='center' style={{ margin: '70vh 0 20vh 0' }}>
+                    <GradientText
+                        colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+                        animationSpeed={3}
+                        showBorder={false}
+                    >
+                        <span>总访客数：</span>
+                        <CountUp
+                            from={0}
+                            to={vistCount}
+                            separator=","
+                            direction="up"
+                            duration={1}
+                            className='count-up-text'
+                        />
+                    </GradientText>
+                </Flex>
+
+                <Flex justify='center' align='center' style={{ margin: '70vh 0 70vh 0' }}>
+                    <Link to="/questionbank" style={{ textDecoration: 'none' }}>
+                        <TrueFocus
+                            sentence="好好学习 天天向上！"
+                            manualMode={false}
+                            blurAmount={5}
+                            borderColor="black"
+                            animationDuration={2}
+                            pauseBetweenAnimations={1}
+                        />
+                    </Link>
+                </Flex>
+
+                <Flex justify='center' align='center' style={{ margin: '70vh 0 70vh 0', height: 'auto' }}>
+                    <ChromaGrid
+                        items={websiteItems.map(item => ({
+                            image: item.image,
+                            title: item.name,
+                            subtitle: item.description,
+                            url: item.linkUrl || '',
+                            borderColor: "#10B981",
+                        }))}
+                        radius={300}
+                        damping={0.45}
+                        fadeOut={0.6}
+                        ease="power3.out"
+                        className="chroma-grid-website"
+                    />
+                </Flex>
+
+                <GradientText
+                    colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+                    animationSpeed={3}
+                    showBorder={false}
+                    className='custom-class '
+                >
+                    精选文章
+                </GradientText>
+
+                <Flex justify='flex-start' vertical style={{ margin: '40vh 0 70vh 0', height: 'auto' }}>
+                    <CardSwap
+                        width={800}
+                        height={500}
+                        cardDistance={80}
+                        verticalDistance={80}
+                        delay={5000}
+                        pauseOnHover={false}
+
+                    >
+                        {articleList.map((item) => (
+                            <Card key={item.id}>
+                                <iframe src={`/articles/${item.id}`} title={item.title} />
+                            </Card>
+                        ))}
+                    </CardSwap>
+
+                </Flex>
+
+            </ClickSpark>
+
+            <Flex justify='center' vertical style={{ margin: '70vh 0 0 0', height: 'auto', backgroundColor: '#181421' }}>
+                <GradientText
+                    colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+                    animationSpeed={3}
+                    showBorder={false}
+                    className='custom-class '
+                >
+                    Language father
+                </GradientText>
+                <RollingGallery autoplay={true} pauseOnHover={true} />
+            </Flex>
+
         </div>
     );
 }

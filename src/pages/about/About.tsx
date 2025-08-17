@@ -1,4 +1,4 @@
-import { Card, Avatar, Tag, Row, Col, Divider, Space } from "antd";
+import { Card, Avatar, Tag, Row, Col, Divider, Space, Flex } from "antd";
 import {
     MailOutlined,
     GithubOutlined,
@@ -6,41 +6,57 @@ import {
     CodeOutlined,
 } from "@ant-design/icons";
 import CalendarHeatmap from "./components/ActiveEchart";
+import ProfileCard from './components/profileCard/ProfileCard';
 
 export default function About() {
     return (
         <div style={{ width: "80%", margin: "0 auto", paddingTop: 20 }}>
+            <Flex justify='center' align='center' style={{ margin: '10vh 0 50vh 0', height: 'auto' }}>
+                <ProfileCard
+                    name="Eee_Tian"
+                    handle="Eee_Tian"
+                    status="全栈开发工程师"
+                    contactText="联系我"
+                    avatarUrl="https://codenest.oss-cn-qingdao.aliyuncs.com/my_image/%E6%88%AA%E5%B1%8F2025-08-11%2021.20.41.png"
+                    showUserInfo={true}
+                    enableTilt={true}
+                    enableMobileTilt={false}
+                    onContactClick={() => console.log('Contact clicked')}
+                />
+            </Flex>
             <Row gutter={[16, 16]}>
                 {/* 左侧个人信息 */}
                 <Col xs={24} sm={8}>
-                    <Card bordered style={{ textAlign: "center" }}>
-                        <Avatar
-                            size={120}
-                            src="https://codenest.oss-cn-qingdao.aliyuncs.com/my_image/%E6%88%AA%E5%B1%8F2025-08-11%2021.20.41.png"
-                            style={{ marginBottom: 16 }}
-                        />
-                        <h2 style={{ marginBottom: 8 }}>Eee_Tian</h2>
-                        <p style={{ color: "rgba(0,0,0,0.65)" }}>全栈开发工程师</p>
-                        <Divider />
-                        <p>
-                            <MailOutlined /> eee_tian@163.com
-                        </p>
-                        <p>
-                            <GithubOutlined />{" "}
-                            <a href="https://github.com/thw610013" target="_blank" rel="noreferrer">
-                                github.com/thw610013
-                            </a>
-                        </p>
-                        <p>
-                            <LinkedinOutlined />{" "}
-                            <a href="http://www.codenest.com.cn" target="_blank" rel="noreferrer">
-                                www.codenest.com.cn
-                            </a>
-                        </p>
-                    </Card>
-                    <Card>
-                        <CalendarHeatmap year="2025" />
-                    </Card>
+                    <Space direction="vertical" size={16}>
+                        <Card style={{ textAlign: "center" }}>
+                            <Avatar
+                                size={120}
+                                src="https://codenest.oss-cn-qingdao.aliyuncs.com/my_image/%E6%88%AA%E5%B1%8F2025-08-11%2021.20.41.png"
+                                style={{ marginBottom: 16 }}
+                            />
+                            <h2 style={{ marginBottom: 8 }}>Eee_Tian</h2>
+                            <p style={{ color: "rgba(0,0,0,0.65)" }}>全栈开发工程师</p>
+                            <Divider />
+                            <p>
+                                <MailOutlined /> eee_tian@163.com
+                            </p>
+                            <p>
+                                <GithubOutlined />{" "}
+                                <a href="https://github.com/thw610013" target="_blank" rel="noreferrer">
+                                    github.com/thw610013
+                                </a>
+                            </p>
+                            <p>
+                                <LinkedinOutlined />{" "}
+                                <a href="http://www.codenest.com.cn" target="_blank" rel="noreferrer">
+                                    www.codenest.com.cn
+                                </a>
+                            </p>
+                        </Card>
+                        <Card>
+                            <CalendarHeatmap year="2025" />
+                        </Card>
+                    </Space>
                 </Col>
 
                 {/* 右侧详细介绍 */}
