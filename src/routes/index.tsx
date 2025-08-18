@@ -12,6 +12,9 @@ import ArticleDetails from '../pages/articles/articleDetails/ArticleDetails';
 import ToolDetails from '../pages/tools/toolDetails/ToolDetails';
 import Questions from '../pages/questionBank/questions/Questions';
 import QuestionDetails from '../pages/questionBank/questions/questionDetails/QuestionDetails';
+import AdminLayout from '../pages/admin/components/AdminLayout';
+import AdminManage from '../pages/admin/adminManage/AdminManage';
+import ArticleManage from '../pages/admin/articleManage/Articlemanage';
 
 export default function AppRoutes() {
     return (
@@ -34,6 +37,11 @@ export default function AppRoutes() {
                 <Route path="messageboard" element={<MessageBoard />} />
                 <Route path="about" element={<About />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
+            </Route>
+
+            <Route path="/admin/manage" element={<AdminLayout />}>
+                <Route index element={<AdminManage />} />
+                <Route path="/admin/manage/article" element={<ArticleManage />} />
             </Route>
         </Routes>
     );

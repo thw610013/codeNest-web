@@ -42,7 +42,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     // itemDistance
     // •	卡片之间的基础间距（单位 px）。
     // •	越大 → 卡片之间分得更开，滚动距离也变长。
-    itemDistance = 500,
+    itemDistance = 400,
     itemScale = 0.03,
     itemStackDistance = 30,
     stackPosition = "1%",

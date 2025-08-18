@@ -169,7 +169,7 @@ const TextType = ({
             className="text-type__content"
             style={{ color: getCurrentTextColor() }}
         >
-            {displayedText}
+            <b> {displayedText}</b>
         </span>,
         showCursor && (
             <span

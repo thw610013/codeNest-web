@@ -1,5 +1,5 @@
 // import CarouselComponent from '../../components/Carousel';
-import { Flex } from "antd";
+import { Flex, } from "antd";
 import './index.css';
 
 import { useEffect, useState } from 'react';
@@ -17,9 +17,10 @@ import TrueFocus from './components/trueFocus/TrueFocus';
 import { Link } from 'react-router-dom';
 import { ChromaGrid } from './components/chromaGrid/ChromaGrid';
 import { type FeaturedContent } from '../../api/featured_content_api';
-import CardSwap, { Card } from './components/cardSwap/CardSwap';
 import { type Article, getArticleList } from '../../api/article_api';
 import RollingGallery from '../../components/rollingGallery/RollingGallery';
+import Magnet from './components/magnet/Magnet';
+import ShinyText from './components/shinyText/ShinyText';
 
 export default function Home() {
 
@@ -145,7 +146,8 @@ export default function Home() {
                                         showBorder={false}
                                         className="custom-class"
                                     >
-                                        胜而不骄，败而不馁
+                                        胜而不骄
+                                        败而不馁
                                     </GradientText>
 
                                 </Flex>
@@ -164,7 +166,28 @@ export default function Home() {
                                         showBorder={false}
                                         className="custom-class"
                                     >
-                                        胜而不骄，败而不馁
+                                        逆水行舟
+                                        不进则退
+                                    </GradientText>
+
+                                </Flex>
+                            </ScrollStackItem>
+                            <ScrollStackItem>
+                                <Flex justify='center' align='center'>
+                                    <GradientText
+                                        colors={[
+                                            "#FF0000", // 鲜红
+                                            "#FF7F00", // 橙色
+                                            "#FFFF00", // 亮黄
+                                            "#00FFFF", // 青色
+                                            "#007FFF"  // 青蓝
+                                        ]}
+                                        animationSpeed={3}
+                                        showBorder={false}
+                                        className="custom-class"
+                                    >
+                                        谋事在人
+                                        成事在天
                                     </GradientText>
 
                                 </Flex>
@@ -173,7 +196,7 @@ export default function Home() {
                     </div>
                 </section>
 
-                <Flex justify='center' align='center'>
+                <Flex justify='center' align='center' style={{ margin: '70vh 0 0 0' }}>
                     <FallingText
                         text={`技术栈 React Bits SpringBoot Mysql AntDesignReact TS MyBatisPlus Knif4j`}
                         highlightWords={["React", "Bits", "SpringBoot"]}
@@ -235,47 +258,49 @@ export default function Home() {
                     />
                 </Flex>
 
-                <GradientText
-                    colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
-                    animationSpeed={3}
-                    showBorder={false}
-                    className='custom-class '
-                >
-                    精选文章
-                </GradientText>
-
-                <Flex justify='flex-start' vertical style={{ margin: '40vh 0 70vh 0', height: 'auto' }}>
-                    <CardSwap
-                        width={800}
-                        height={500}
-                        cardDistance={80}
-                        verticalDistance={80}
-                        delay={5000}
-                        pauseOnHover={false}
-
+                <Flex justify='center' vertical align='center' style={{ margin: '70vh 0 0 0', height: 'auto' }}>
+                    <GradientText
+                        colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+                        animationSpeed={3}
+                        showBorder={false}
+                        className='custom-class '
                     >
+                        精选文章
+                    </GradientText>
+                    <div style={{ marginTop: 48, display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center' }}>
                         {articleList.map((item) => (
-                            <Card key={item.id}>
-                                <iframe src={`/articles/${item.id}`} title={item.title} />
-                            </Card>
+                            <Magnet key={item.id ?? item.title} padding={200} magnetStrength={3}>
+                                <Link to={`/articles/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                    <ShinyText
+                                        text={`✨ ${item.title} 🚀`}
+                                        className='article-title flicker'
+                                        speed={3}
+                                        disabled={false}
+                                    />
+                                </Link>
+                            </Magnet>
                         ))}
-                    </CardSwap>
+                    </div>
+                </Flex>
+
+                <Flex justify='center' align="center" vertical style={{ margin: '70vh 0 0 0', height: 'auto', backgroundColor: '#181421' }}>
+
+                    <GradientText
+                        colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+                        animationSpeed={3}
+                        showBorder={false}
+                        className='custom-class '
+                    >
+                        从 Hello World 到世界
+                    </GradientText>
+                    <RollingGallery autoplay={true} pauseOnHover={true} />
+
+                    <span style={{ color: 'white', fontSize: 12 }}>备案号：</span>
+                    <span style={{ color: 'white', fontSize: 12 }}>CodeNest ©{new Date().getFullYear()}  版权所有</span>
 
                 </Flex>
 
             </ClickSpark>
-
-            <Flex justify='center' vertical style={{ margin: '70vh 0 0 0', height: 'auto', backgroundColor: '#181421' }}>
-                <GradientText
-                    colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
-                    animationSpeed={3}
-                    showBorder={false}
-                    className='custom-class '
-                >
-                    Language father
-                </GradientText>
-                <RollingGallery autoplay={true} pauseOnHover={true} />
-            </Flex>
 
         </div>
     );

@@ -111,7 +111,7 @@ export default function Layout() {
                     </Space>
                 </Row>
                 <Row justify="center">备案号：</Row>
-                <Row justify="center">CodeNest ©{new Date().getFullYear()} Created by Ant UED</Row>
+                <Row justify="center">CodeNest ©{new Date().getFullYear()}  版权所有</Row>
             </Footer>
         </AntLayout>
     );

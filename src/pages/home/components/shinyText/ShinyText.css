@@ -1,0 +1,59 @@
+.shiny-text {
+    color: #1f1f1fa4;
+    /* Adjust this color to change intensity/style */
+    background: linear-gradient(120deg,
+            rgba(148, 146, 146, 0) 40%,
+            rgba(255, 255, 255, 0.8) 50%,
+            rgba(255, 255, 255, 0) 60%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    display: inline-block;
+    animation: shine 5s linear infinite;
+}
+
+@keyframes shine {
+    0% {
+        background-position: 100%;
+    }
+
+    100% {
+        background-position: -100%;
+    }
+}
+
+.shiny-text.disabled {
+    animation: none;
+}
+
+/* Smaller article title style */
+.shiny-text.article-title {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+    .shiny-text.article-title {
+        font-size: 18px;
+    }
+}
+
+/* Add an energetic flicker/glow effect */
+.shiny-text.flicker {
+    animation: shine 5s linear infinite, flicker 3s ease-in-out infinite;
+    text-shadow: 0 0 0px rgba(64, 255, 170, 0.0), 0 0 0px rgba(64, 121, 255, 0.0);
+}
+
+@keyframes flicker {
+
+    0%,
+    100% {
+        opacity: 1;
+        text-shadow: 0 0 2px rgba(64, 255, 170, 0.2), 0 0 6px rgba(64, 121, 255, 0.25);
+    }
+
+    50% {
+        opacity: 0.92;
+        text-shadow: 0 0 6px rgba(64, 255, 170, 0.45), 0 0 14px rgba(64, 121, 255, 0.5);
+    }
+}
