@@ -14,7 +14,9 @@ import Questions from '../pages/questionBank/questions/Questions';
 import QuestionDetails from '../pages/questionBank/questions/questionDetails/QuestionDetails';
 import AdminLayout from '../pages/admin/components/AdminLayout';
 import AdminManage from '../pages/admin/adminManage/AdminManage';
-import ArticleManage from '../pages/admin/articleManage/Articlemanage';
+import ArticleManage from '../pages/admin/articleManage/ArticleManage';
+import DataManage from '../pages/admin/dataManage/DataManage';
+import MessageManage from '../pages/admin/messageManage/MessageManage';
 
 export default function AppRoutes() {
     return (
@@ -41,7 +43,10 @@ export default function AppRoutes() {
 
             <Route path="/admin/manage" element={<AdminLayout />}>
                 <Route index element={<AdminManage />} />
+                <Route path="/admin/manage/data" element={<DataManage />} />
                 <Route path="/admin/manage/article" element={<ArticleManage />} />
+                <Route path="/admin/manage/message" element={<MessageManage />} />
+
             </Route>
         </Routes>
     );

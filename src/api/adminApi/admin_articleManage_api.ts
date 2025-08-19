@@ -1,5 +1,5 @@
 // src/api/adminApi/admin_articleManage_api.ts
-import { request } from '../../utils/request';
+import { request } from '../../utils/admin_request';
 
 export interface Article {
     id?: number;

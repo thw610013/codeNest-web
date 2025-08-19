@@ -1,8 +1,9 @@
-import { Button, Form, Input, Modal, message } from "antd";
+import { Button, Flex, Form, Input, Modal, message } from "antd";
 import { useState } from "react";
 import type { FormProps } from "antd";
 import MdEditor from "../../../components/mdEditor/MdEditor";
 import { createArticle } from "../../../api/adminApi/admin_articleManage_api";
+import AdminArticleTable from "./components/AdminArticleTable";
 
 type FieldType = {
     title: string;
@@ -14,6 +15,7 @@ const ArticleManage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm<FieldType>();
     const [loading, setLoading] = useState(false);
+    const { Search } = Input;
 
     const showModal = () => setIsModalOpen(true);
     const handleOk = () => form.submit();
@@ -46,54 +48,69 @@ const ArticleManage = () => {
         console.log("校验失败:", errorInfo);
     };
 
+    const onSearch = (value: string) => {
+        console.log("搜索:", value);
+    };
+
     return (
         <div>
-            <Button type="primary" onClick={showModal}>
-                新增文章
-            </Button>
 
-            <Modal
-                title="新增文章"
-                open={isModalOpen}
-                onCancel={handleCancel}
-                okText="提交"
-                cancelText="取消"
-                onOk={handleOk}
-                confirmLoading={loading} // 提交时按钮 loading 状态
-            >
-                <Form
-                    form={form}
-                    layout="vertical"
-                    initialValues={{}}
-                    onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
-                    autoComplete="off"
+            <Flex vertical gap={16}>
+
+                <Flex justify="space-between">
+                    <Button type="primary" onClick={showModal}>
+                        新增文章
+                    </Button>
+                    <Search placeholder="输入文章标题" onSearch={onSearch} enterButton
+                        style={{ width: '300px' }} />
+                </Flex>
+                <AdminArticleTable />
+
+                <Modal
+                    title="新增文章"
+                    open={isModalOpen}
+                    onCancel={handleCancel}
+                    okText="提交"
+                    cancelText="取消"
+                    onOk={handleOk}
+                    confirmLoading={loading} // 提交时按钮 loading 状态
                 >
-                    <Form.Item
-                        label="文章题目"
-                        name="title"
-                        rules={[{ required: true, message: "请输入文章题目" }]}
+                    <Form
+                        form={form}
+                        layout="vertical"
+                        initialValues={{}}
+                        onFinish={onFinish}
+                        onFinishFailed={onFinishFailed}
+                        autoComplete="off"
                     >
-                        <Input placeholder="请输入标题" />
-                    </Form.Item>
+                        <Form.Item
+                            label="文章题目"
+                            name="title"
+                            rules={[{ required: true, message: "请输入文章题目" }]}
+                        >
+                            <Input placeholder="请输入标题" />
+                        </Form.Item>
 
-                    <Form.Item
-                        label="文章标签"
-                        name="tags"
-                        rules={[{ required: true, message: "请输入文章标签" }]}
-                    >
-                        <Input placeholder="请输入标签，多个用逗号隔开" />
-                    </Form.Item>
+                        <Form.Item
+                            label="文章标签"
+                            name="tags"
+                            rules={[{ required: true, message: "请输入文章标签" }]}
+                        >
+                            <Input placeholder="请输入标签，多个用逗号隔开" />
+                        </Form.Item>
 
-                    <Form.Item
-                        label="文章内容"
-                        name="content"
-                        rules={[{ required: true, message: "请输入文章内容" }]}
-                    >
-                        <MdEditor placeholder="请输入文章内容" />
-                    </Form.Item>
-                </Form>
-            </Modal>
+                        <Form.Item
+                            label="文章内容"
+                            name="content"
+                            rules={[{ required: true, message: "请输入文章内容" }]}
+                        >
+                            <MdEditor placeholder="请输入文章内容" />
+                        </Form.Item>
+                    </Form>
+                </Modal>
+
+            </Flex>
+
         </div>
     );
 };

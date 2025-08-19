@@ -1,3 +1,16 @@
 .bytemd-toolbar-icon.bytemd-tippy.bytemd-tippy-right:last-child {
     display: none;
 }
+
+/* Ensure the editor overlays modal internals when entering fullscreen */
+.bytemd.bytemd-fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    /* higher than Antd Modal (1000) */
+}
+
+/* When the editor is fullscreen inside an Antd Modal, hide the footer buttons */
+.ant-modal:has(.bytemd-fullscreen) .ant-modal-footer {
+    display: none;
+}

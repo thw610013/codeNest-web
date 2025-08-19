@@ -6,6 +6,7 @@ import {
     MessageOutlined,
     InfoCircleOutlined,
     DashboardOutlined,
+    HomeOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
@@ -31,12 +32,13 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-    getItem('数据面板', 'data', <DashboardOutlined />),
+    getItem('首页', 'admin', <HomeOutlined />),
     getItem('文章管理', 'article', <FileOutlined />),
     getItem('工具管理', 'tool', <ToolOutlined />),
+    getItem('数据面板', 'data', <DashboardOutlined />),
     getItem('题库管理', 'question', <QuestionOutlined />),
     getItem('留言管理', 'message', <MessageOutlined />),
-    getItem('关于管理', 'about', <InfoCircleOutlined />),
+    getItem('个人介绍管理', 'about', <InfoCircleOutlined />),
 ];
 
 const App: React.FC = () => {
@@ -46,21 +48,32 @@ const App: React.FC = () => {
     } = theme.useToken();
     const navigate = useNavigate();
     const handleMenuClick: MenuProps['onClick'] = (e) => {
-        if (e.key === 'article') {
-            navigate('/admin/manage/article');
+        if (e.key === 'admin') {
+            navigate('/admin/manage');
         } else if (e.key === 'data') {
             navigate('/admin/manage/data');
+        } else if (e.key === 'message') {
+            navigate('/admin/manage/message');
+        } else if (e.key === 'article') {
+            navigate('/admin/manage/article');
+        } else if (e.key === 'tool') {
+            navigate('/admin/manage/tool');
+        } else if (e.key === 'question') {
+            navigate('/admin/manage/question');
+        } else if (e.key === 'about') {
+            navigate('/admin/manage/about');
         }
+
         // 其它菜单项可以依次添加
     };
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
-            <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                <div className="demo-logo-vertical" />
+            <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} style={{ background: colorBgContainer }}>
+                <div />
                 <Menu
-                    theme="dark"
-                    defaultSelectedKeys={['article']}
+                    theme="light"
+                    defaultSelectedKeys={['']}
                     mode="inline"
                     items={items}
                     onClick={handleMenuClick}
@@ -70,7 +83,7 @@ const App: React.FC = () => {
             <Layout>
                 <Header style={{ padding: 0, background: colorBgContainer }} />
                 <Content style={{ margin: '0 16px' }}>
-                    <Breadcrumb style={{ margin: '16px 0' }} items={[{ title: 'User' }, { title: 'Bill' }]} />
+                    <Breadcrumb style={{ margin: '16px 0' }} />
                     <div
                         style={{
                             padding: 24,
