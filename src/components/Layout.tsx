@@ -106,12 +106,12 @@ export default function Layout() {
             <Footer>
                 <Row justify="center">
                     <Space>
-                        <span>最近更新时间：2025-08-17</span>
+                        <span>最近更新时间：2025-08-20</span>
                         <span>总访客: {vistCount}</span>
                     </Space>
                 </Row>
                 <Row justify="center">备案号：</Row>
-                <Row justify="center">CodeNest ©{new Date().getFullYear()}  版权所有</Row>
+                <Row justify="center">©{new Date().getFullYear()} CodeNest   版权所有</Row>
             </Footer>
         </AntLayout>
     );

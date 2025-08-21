@@ -27,7 +27,7 @@ export default function ArticleDetails() {
 
         getArticleById(articleId).then(setArticle);
 
-        getVisitLogsByArticleId(articleId).then(logs => setVisitCount(logs.length));
+        getVisitLogsByArticleId(articleId).then(data => setVisitCount(data));
 
         getLikeByTarget("1", articleId).then(data => setLikeCount(data || 0));
     }, [id]);

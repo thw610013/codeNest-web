@@ -17,6 +17,7 @@ import AdminManage from '../pages/admin/adminManage/AdminManage';
 import ArticleManage from '../pages/admin/articleManage/ArticleManage';
 import DataManage from '../pages/admin/dataManage/DataManage';
 import MessageManage from '../pages/admin/messageManage/MessageManage';
+import ErrorPage from '../pages/error/ErrorPage';
 
 export default function AppRoutes() {
     return (
@@ -38,6 +39,7 @@ export default function AppRoutes() {
                 <Route path="wallpaper" element={<Wallpaper />} />
                 <Route path="messageboard" element={<MessageBoard />} />
                 <Route path="about" element={<About />} />
+                <Route path="error/:code" element={<ErrorPage />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
 
@@ -46,6 +48,7 @@ export default function AppRoutes() {
                 <Route path="/admin/manage/data" element={<DataManage />} />
                 <Route path="/admin/manage/article" element={<ArticleManage />} />
                 <Route path="/admin/manage/message" element={<MessageManage />} />
+                <Route path="/admin/manage/error/:code" element={<ErrorPage />} />
 
             </Route>
         </Routes>

@@ -9,9 +9,9 @@ import {
     HomeOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Breadcrumb, Flex, Layout, Menu, theme } from 'antd';
 import { Outlet } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -47,6 +47,19 @@ const App: React.FC = () => {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const getSelectedKey = (path: string): string => {
+        if (path === '/admin/manage' || path === '/admin/manage/') return 'admin';
+        if (path.startsWith('/admin/manage/article')) return 'article';
+        if (path.startsWith('/admin/manage/tool')) return 'tool';
+        if (path.startsWith('/admin/manage/data')) return 'data';
+        if (path.startsWith('/admin/manage/question')) return 'question';
+        if (path.startsWith('/admin/manage/message')) return 'message';
+        if (path.startsWith('/admin/manage/about')) return 'about';
+        return '';
+    };
+    const selectedKey = getSelectedKey(location.pathname);
     const handleMenuClick: MenuProps['onClick'] = (e) => {
         if (e.key === 'admin') {
             navigate('/admin/manage');
@@ -73,7 +86,7 @@ const App: React.FC = () => {
                 <div />
                 <Menu
                     theme="light"
-                    defaultSelectedKeys={['']}
+                    selectedKeys={[selectedKey]}
                     mode="inline"
                     items={items}
                     onClick={handleMenuClick}
@@ -96,7 +109,10 @@ const App: React.FC = () => {
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
-                    Ant Design ©{new Date().getFullYear()} Created by Ant UED
+                    <Flex justify="center" align="middle" vertical>
+                        <span>备案号：</span>
+                        <span>©{new Date().getFullYear()} CodeNest   版权所有</span>
+                    </Flex>
                 </Footer>
             </Layout>
         </Layout>

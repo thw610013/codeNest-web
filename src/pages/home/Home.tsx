@@ -296,7 +296,7 @@ export default function Home() {
                     <RollingGallery autoplay={true} pauseOnHover={true} />
 
                     <span style={{ color: 'white', fontSize: 12 }}>备案号：</span>
-                    <span style={{ color: 'white', fontSize: 12 }}>CodeNest ©{new Date().getFullYear()}  版权所有</span>
+                    <span style={{ color: 'white', fontSize: 12 }}>©{new Date().getFullYear()} CodeNest  版权所有</span>
 
                 </Flex>
 

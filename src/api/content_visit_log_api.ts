@@ -14,7 +14,7 @@ export interface ContentVisitLog {
 
 // 根据文章 ID 查询访问记录
 export const getVisitLogsByArticleId = (articleId: number) => {
-    return request<ContentVisitLog[]>({
+    return request<number>({
         url: `/api/content-visit-logs/article/${articleId}`,
         method: 'GET',
     });
@@ -22,7 +22,7 @@ export const getVisitLogsByArticleId = (articleId: number) => {
 
 // 根据题库 ID 查询访问记录
 export const getVisitLogsByQuestionBankId = (questionBankId: number) => {
-    return request<ContentVisitLog[]>({
+    return request<number>({
         url: `/api/content-visit-logs/question-bank/${questionBankId}`,
         method: 'GET',
     });
@@ -30,7 +30,7 @@ export const getVisitLogsByQuestionBankId = (questionBankId: number) => {
 
 // 根据题目 ID 查询访问记录
 export const getVisitLogsByQuestionId = (questionId: number) => {
-    return request<ContentVisitLog[]>({
+    return request<number>({
         url: `/api/content-visit-logs/question/${questionId}`,
         method: 'GET',
     });

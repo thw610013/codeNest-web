@@ -85,3 +85,11 @@ export const searchArticles = (data: ArticleSearchParams) => {
         data,
     });
 };
+
+// 获取文章标签
+export const getArticleTags = () => {
+    return request<Record<string, string>>({
+        url: '/api/admin/article-manage/tags',
+        method: 'GET',
+    });
+};

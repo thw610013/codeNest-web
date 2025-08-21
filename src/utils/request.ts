@@ -6,7 +6,6 @@ const service: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || '', // 从环境变量读取基础URL
     timeout: 10000, // 请求超时时间
 });
-
 // 请求拦截器
 service.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
@@ -29,6 +28,13 @@ service.interceptors.response.use(
         const res = response.data;
         // 你后端统一返回结构 code、message、data，这里可以做统一处理
         if (res.code !== 200) {
+            if (res.code === 404) {
+                window.location.href = '/error/404';
+            } else if (res.code === 403) {
+                window.location.href = '/error/403';
+            } else if (res.code === 500) {
+                window.location.href = '/error/500';
+            }
             // 这里可以弹错误提示，或者统一处理逻辑
             return Promise.reject(new Error(res.message || 'Error'));
         }

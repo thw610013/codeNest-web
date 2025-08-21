@@ -11,9 +11,9 @@ const service: AxiosInstance = axios.create({
 service.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
         // 可以统一加 token 或其他请求头
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('AuthorizationNumber');
         if (token && config.headers) {
-            config.headers['Authorization'] = `Bearer ${token}`;
+            config.headers['Authorization'] = `Bearer${token}`;
         }
         if (localStorage.getItem('AuthorizationNumber') != 'thw000') {
             window.location.href = '/admin/manage';

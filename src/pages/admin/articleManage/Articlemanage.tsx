@@ -1,10 +1,10 @@
-import { Button, Flex, Form, Input, Modal, message } from "antd";
-import { useState } from "react";
+import { Button, Flex, Form, Input, Modal, message, Select, Row, Col, Space } from "antd";
+import { useEffect, useState } from "react";
 import type { FormProps } from "antd";
 import MdEditor from "../../../components/mdEditor/MdEditor";
 import { createArticle } from "../../../api/adminApi/admin_articleManage_api";
 import AdminArticleTable from "./components/AdminArticleTable";
-
+import { getArticleTags } from '../../../api/adminApi/admin_articleManage_api';
 type FieldType = {
     title: string;
     content: string;
@@ -16,7 +16,37 @@ const ArticleManage = () => {
     const [form] = Form.useForm<FieldType>();
     const [loading, setLoading] = useState(false);
     const { Search } = Input;
+    const [searchType, setSearchType] = useState('all');
 
+    const [searchTypeOptions, setSearchTypeOptions] = useState([
+        { value: 'all', label: '全部' },
+        { value: 'diary', label: '日记' },
+        { value: 'draft', label: '学习经验' }
+    ]);
+
+    // 获取文章全部标签方法
+    useEffect(() => {
+        const fetchTags = async () => {
+            try {
+                const tagsMap = await getArticleTags();
+                const dynamicOptions = Object.entries(tagsMap ?? {}).map(([value, label]) => ({
+                    value,
+                    label
+                }));
+                setSearchTypeOptions([
+                    { value: 'all', label: '全部' },
+                    ...dynamicOptions
+                ]);
+            } catch (e) {
+                // 可选：降级到仅“全部”
+                setSearchTypeOptions([{ value: 'all', label: '全部' }]);
+                console.error(e);
+            }
+        };
+        fetchTags();
+    }, []);
+
+    // 新增文章方法
     const showModal = () => setIsModalOpen(true);
     const handleOk = () => form.submit();
     const handleCancel = () => setIsModalOpen(false);
@@ -30,7 +60,7 @@ const ArticleManage = () => {
                 content: values.content,
                 tags: values.tags,
                 author: "管理员", // 这里可以根据登录信息自动填充
-                status: 1,        // 默认状态，比如 1=已发布
+                status: 1,
             });
 
             message.success("文章创建成功 🎉");
@@ -57,14 +87,30 @@ const ArticleManage = () => {
 
             <Flex vertical gap={16}>
 
-                <Flex justify="space-between">
-                    <Button type="primary" onClick={showModal}>
-                        新增文章
-                    </Button>
-                    <Search placeholder="输入文章标题" onSearch={onSearch} enterButton
-                        style={{ width: '300px' }} />
-                </Flex>
-                <AdminArticleTable />
+                <Row>
+                    <Col span={18}>
+                        <Button type="primary" onClick={showModal}>
+                            新增文章
+                        </Button>
+                    </Col>
+                    <Col span={6}>
+                        <Space size='large'>
+                            <Select
+                                value={searchType}
+                                onChange={setSearchType}
+                                style={{ width: 120 }}
+                                options={searchTypeOptions}
+                            />
+                            <Search placeholder="输入文章标题" onSearch={onSearch} enterButton
+                                style={{ width: '300px' }} />
+                        </Space>
+                    </Col>
+                </Row>
+
+                <AdminArticleTable
+                    filterTag={searchType}
+                    onTagClick={(tag) => setSearchType(tag)}
+                />
 
                 <Modal
                     title="新增文章"

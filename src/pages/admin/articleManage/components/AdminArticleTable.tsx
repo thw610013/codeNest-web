@@ -1,14 +1,18 @@
 import React, { useEffect } from 'react';
 import { Space, Table, Tag, Button, message, Modal, Form, Input, Tabs, Popconfirm } from 'antd';
 import type { TableProps } from 'antd';
-import { type Article, getArticleList, updateArticle, deleteArticle } from '../../../../api/adminApi/admin_articleManage_api';
+import { type Article, getArticleList, updateArticle, deleteArticle, searchArticles } from '../../../../api/adminApi/admin_articleManage_api';
 import { useState } from 'react';
 import MdViewer from '../../../../components/MdViewer';
 import MdEditor from '../../../../components/mdEditor/MdEditor';
+import { tagMap } from '../../../../components/TagMap';
 
-type ArticleTableProps = Record<string, never>;
+type ArticleTableProps = {
+    filterTag?: string;
+    onTagClick?: (tag: string) => void;
+};
 
-const columns: TableProps<Article>['columns'] = [
+const createColumns = (onClickTag?: (tag: string) => void): NonNullable<TableProps<Article>['columns']> => [
     {
         title: '文章题目',
         dataIndex: 'title',
@@ -27,10 +31,15 @@ const columns: TableProps<Article>['columns'] = [
             return (
                 <>
                     {tagsArray.map((tag) => {
-                        const color = tag.length > 5 ? 'geekblue' : 'green';
+                        const { label, color } = tagMap[tag] ?? { label: tag, color: "gray" };
                         return (
-                            <Tag color={color} key={tag}>
-                                {tag.toUpperCase()}
+                            <Tag
+                                color={color}
+                                key={tag}
+                                style={{ cursor: onClickTag ? "pointer" : undefined }}
+                                onClick={() => onClickTag?.(tag)}
+                            >
+                                {label}
                             </Tag>
                         );
                     })}
@@ -60,22 +69,24 @@ const columns: TableProps<Article>['columns'] = [
     },
 ];
 
-const App: React.FC<ArticleTableProps> = () => {
+const App: React.FC<ArticleTableProps> = ({ filterTag, onTagClick }) => {
     const [data, setData] = useState<Article[]>([]);
     const [loading, setLoading] = useState(false);
-
     // 编辑相关
     const [editOpen, setEditOpen] = useState(false);
     const [current, setCurrent] = useState<Article | null>(null);
     const [activeTab, setActiveTab] = useState<'preview' | 'edit'>('preview');
+
     const [form] = Form.useForm<Article>();
 
-    const fetchList = () => {
+    const fetchList = (tag?: string) => {
         setLoading(true);
-        getArticleList()
-            .then((res) => {
-                setData(res);
-            })
+        const request = tag && tag !== 'all'
+            ? searchArticles({ tag })
+            : getArticleList();
+        request.then((res) => {
+            setData(res);
+        })
             .catch((err) => {
                 console.error(err);
                 message.error('获取文章列表失败');
@@ -84,8 +95,16 @@ const App: React.FC<ArticleTableProps> = () => {
     };
 
     useEffect(() => {
-        fetchList();
-    }, []);
+        fetchList(filterTag);
+    }, [filterTag]);
+
+    const handleTagClick = (tag: string) => {
+        if (onTagClick) {
+            onTagClick(tag);
+        } else {
+            fetchList(tag);
+        }
+    };
 
     const handleOpenEdit = (record: Article) => {
         setCurrent(record);
@@ -149,7 +168,8 @@ const App: React.FC<ArticleTableProps> = () => {
         </Space>
     );
 
-    const finalColumns: TableProps<Article>['columns'] = columns.map((c) =>
+    const baseColumns = createColumns(handleTagClick);
+    const finalColumns: NonNullable<TableProps<Article>['columns']> = baseColumns.map((c) =>
         c.key === 'action' ? { ...c, render: actionRender } : c
     );
 

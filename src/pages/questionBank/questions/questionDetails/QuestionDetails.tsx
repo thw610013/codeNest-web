@@ -62,7 +62,7 @@ export default function QuestionDetails() {
                     .catch(err => console.error('访问日志记录失败', err));
 
                 getVisitLogsByQuestionId(data.id)
-                    .then(logs => setVisitCount(logs.length))
+                    .then(data => setVisitCount(data))
                     .catch(err => console.error('访问日志记录获取失败', err));
             });
 
